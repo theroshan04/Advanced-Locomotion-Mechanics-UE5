@@ -41,6 +41,7 @@ private:
 	void OpenMenu();
 	void Aim();
 	void Shoot();
+	void GetGroundDistance();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "References")
@@ -48,6 +49,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion")
 	UAnimInstance* PlayerAnimInstance;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion")
+	float GroundDistance;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Locomotion")
 	EGait CurrentGait;
@@ -68,13 +72,13 @@ protected:
 	TSubclassOf<UAnimInstance> PistolAnimInstanceClass;
 
 private:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* PlayerMesh;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* PlayerCapsule;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCharacterMovementComponent* PlayerMovement;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))

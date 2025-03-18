@@ -9,6 +9,9 @@
 #include "EnhancedInputComponent.h"
 #include "Main/MainPlayerController.h"
 #include "Interface/AnimDataReceiverInterface.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/World.h"
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -70,6 +73,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GetGroundDistance();
 }
 
 void APlayerCharacter::UpdateGaitSettings(EGait Gait)
@@ -163,6 +167,19 @@ void APlayerCharacter::Aim()
 
 void APlayerCharacter::Shoot()
 {
+}
+
+void APlayerCharacter::GetGroundDistance()
+{
+	FVector StartLocation = GetActorLocation() - FVector(0.0f, 0.0f, PlayerCapsule->GetScaledCapsuleHalfHeight());
+	FVector EndLocation = GetActorLocation() - FVector(0.0f, 0.0f, 1000.0f);
+	FHitResult HitResult;
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), StartLocation, EndLocation, 5.0f, UEngineTypes::ConvertToTraceType(ECC_Visibility), false, { this }, EDrawDebugTrace::None, HitResult, true);
+	if (bHit && PlayerAnimInstance)
+	{
+		GroundDistance = HitResult.Distance;
+		IAnimDataReceiverInterface::Execute_ReceiveGroundDistance(PlayerAnimInstance, GroundDistance);
+	}
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
