@@ -30,7 +30,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void UpdateGaitSettings(EGait Gait);
 
 private:
